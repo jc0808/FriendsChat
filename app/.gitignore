@@ -1,1 +1,5 @@
 /build
+/google-services.json
+/java/com/example/friendschat/utils/AndroidUtil.java
+/java/com/example/friendschat/utils/FirebaseUtil.java
+
