@@ -92,7 +92,7 @@ public class SearchUser extends AppCompatActivity {
         super.onResume();
 
         if (adapter != null){
-            adapter.startListening();
+            adapter.notifyDataSetChanged();
         }
     }
 }

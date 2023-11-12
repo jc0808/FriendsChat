@@ -1,6 +1,8 @@
 package com.example.friendschat.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.friendschat.ChatScreen;
 import com.example.friendschat.R;
 import com.example.friendschat.model.UserModel;
+import com.example.friendschat.utils.AndroidUtil;
 import com.example.friendschat.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -33,8 +37,19 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserMode
             holder.usernameText.setText(model.getUsername() + " (Me)");
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        FirebaseUtil.getOtherProfilePicStorageRef(model.getUserId()).getDownloadUrl()
+                .addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        Uri uri = t.getResult();
+                        AndroidUtil.setProfilePic(context, uri,holder.profilePic);
+                    }
+                });
 
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ChatScreen.class);
+            AndroidUtil.passUserModelAsIntent(intent, model);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         });
 
     }
